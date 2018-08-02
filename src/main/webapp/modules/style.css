@@ -1,0 +1,6 @@
+@CHARSET "ISO-8859-1";
+.gridStyle {
+    border: 1px solid rgb(212,212,212);
+    width: 820px; 
+    height: 400px
+}
