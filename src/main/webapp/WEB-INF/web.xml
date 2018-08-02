@@ -24,4 +24,8 @@
 	<url-pattern>/services/*</url-pattern>
   </servlet-mapping>
   
+  <welcome-file-list>
+      <welcome-file>/modules/Loan.html</welcome-file>
+  </welcome-file-list>
+  
 </web-app>
