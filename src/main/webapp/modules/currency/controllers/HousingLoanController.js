@@ -25,7 +25,7 @@ $scope.selectedItems =[];
 $scope.getHousingLoan=function(requestParam) {
 	$http({
     method: 'POST',
-    url: "http://192.168.43.8:8080/services/housingloan/getHousingLoanInfo",
+    url: "http://localhost:8080/MyAngularApp/services/housingloan/getHousingLoanInfo",
     data: requestParam,
     headers: {'Content-Type': 'application/json'}
 }).success(function (data, status, headers, config) {
