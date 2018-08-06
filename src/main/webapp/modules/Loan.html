@@ -23,27 +23,27 @@
 </head>
 
 <body bgcolor="#FFE4B5">
-    <script src="modules/app.js"></script>
-    <script src="modules/ng-grid.js"></script>
+    <script src="/app.js"></script>
+    <script src="/ng-grid.js"></script>
     <!-- Currency -->
-    <script src="modules/currency/controllers/HousingLoanController.js"></script>
+    <script src="/currency/controllers/HousingLoanController.js"></script>
     <div>
         <table>
-            <div>                
+            <div>
                 <tr>
 	                <td width="25%">
 					    <span><b><p>Enter the Principle:</p></b></span>
 					    <input type="text" min="0" ng-model="requestParam.principle" required>
-					</td>				
-               
-                
-                
+					</td>
+
+
+
 	                <td width="25%">
 					    <span><b><p>Enter the Interest:</p></b></span>
 					    <input type="text" min="0" ng-model="requestParam.interestRate" required>
-					</td>				
-                 
-                
+					</td>
+
+
 	                <td width="25%">
 					    <span><b><p>Enter the Tenure(Years):</p></b></span>
 					    <input type="text" min="0" ng-model="requestParam.tenure" required>
@@ -58,12 +58,12 @@
                  	</td>
                  </tr>
             </div>
-            
+
         </table>
     </div>
    <br><br>
     <div align="center">
-        <button ng-click="getHousingLoan(requestParam)">Get EMI</button>&nbsp; &nbsp; &nbsp; &nbsp; 
+        <button ng-click="getHousingLoan(requestParam)">Get EMI</button>&nbsp; &nbsp; &nbsp; &nbsp;
     </div>
     <br>
     <br>
