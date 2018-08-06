@@ -5,7 +5,7 @@ var myfirstApp=angular.module("MyFirstApp",['ngGrid']);
 //Controller Configuration
 myfirstApp.controller('myFirstAppController',['$scope','$http',function($scope,$http){
 
-	
+
 $scope.filterOptions = {
 	filterText: ''
 };
@@ -25,7 +25,7 @@ $scope.selectedItems =[];
 $scope.getHousingLoan=function(requestParam) {
 	$http({
     method: 'POST',
-    url: "http://localhost:8080/MyAngularApp/services/housingloan/getHousingLoanInfo",
+    url: "https://housingloancalcultor.herokuapp.com/services/housingloan/getHousingLoanInfo",
     data: requestParam,
     headers: {'Content-Type': 'application/json'}
 }).success(function (data, status, headers, config) {
@@ -37,7 +37,7 @@ $scope.getHousingLoan=function(requestParam) {
 };
 
 
-$scope.gridOptions = { 
+$scope.gridOptions = {
 	data: 'loanDetailList',
 	filterOptions: $scope.filterOptions,
 	selectedItems: [],
