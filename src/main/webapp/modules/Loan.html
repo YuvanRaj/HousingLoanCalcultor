@@ -14,7 +14,13 @@
  -->
     <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
  -->
+ 	
+ 	<link href="js/c3.min.css" rel="stylesheet" type="text/css"/>
+	<script src="js/d3.min.js" charset="utf-8"></script>
+	<script src="js/c3.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
+    <script src="js/c3-angular.min.js"></script> 
+    
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-resource.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
@@ -56,11 +62,25 @@
                  	<h2 style="color:red;"><p><b>EMI Payable (Per Month)<b></b></p></h2>
                  	{{constantEmi}}
                  	</td>
+                 	<td align="center">
+                 		<h3 style="color:blue;"><p><b>{{information}}<b></b></p></h2>
+                 	</td>
                  </tr>
             </div>
 
         </table>
-    </div>
+    </div> 
+    <div>
+    	<!-- <c3chart bindto-id="stacked-bar-plot1-chart">
+		  <chart-column column-id="data 1"
+		          column-name="Data 1"
+		          column-color="red"
+		          column-values="yvalue"
+		          column-type="bar"/>
+		</c3chart> -->
+		<c3chart bindto-id="chart" chart-data="datapoints" chart-columns="datacolumns">
+		</c3chart>
+    </div>   
    <br><br>
     <div align="center">
         <button ng-click="getHousingLoan(requestParam)">Get EMI</button>&nbsp; &nbsp; &nbsp; &nbsp;

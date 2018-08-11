@@ -2,6 +2,7 @@ package com.angular.cfc;
 
 public class HousingLoanInfo {
 
+	private int interestDecreaseYear;
 	private int year;
 	private Double openingBalance;
 	private Double emi;
@@ -66,4 +67,14 @@ public class HousingLoanInfo {
 		this.year = year;
 	}
 
+	public int getInterestDecreaseYear() {
+		return interestDecreaseYear;
+	}
+
+	public void setInterestDecreaseYear(int interestDecreaseYear) {
+		this.interestDecreaseYear = interestDecreaseYear;
+	}
+
+	
+	
 }

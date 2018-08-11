@@ -8,7 +8,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import com.angular.cfc.ChartInfo;
 import com.angular.cfc.HousingLoanInfo;
+import com.angular.cfc.HousingLoanResponse;
 import com.angular.cfc.RequestParam;
 
 /**
@@ -24,8 +26,8 @@ public class HousingLoanController {
 	@Path("getHousingLoanInfo")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	public static List<HousingLoanInfo> getHousingLoanInfoList(RequestParam requestParam) {
-
+	public static HousingLoanResponse getHousingLoanInfoList(RequestParam requestParam) {
+		HousingLoanResponse housingLoanResponse = new HousingLoanResponse();
 		Double p = requestParam.getPrinciple();
 		Double r = (requestParam.getInterestRate() / 100) / 12;
 		Double n = requestParam.getTenure() * 12;
@@ -33,7 +35,6 @@ public class HousingLoanController {
 		Double numerator = Math.pow(1 + r, n);
 		Double denominator = numerator - 1;
 		Double emi = (p * r * numerator) / denominator;
-		
 
 		List<HousingLoanInfo> housingInfoList = new ArrayList<HousingLoanInfo>();
 		HousingLoanInfo housingLoanInfo = new HousingLoanInfo();
@@ -62,13 +63,18 @@ public class HousingLoanController {
 			housingInfoList.add(housingLoanInfo);
 		}
 
-		List<HousingLoanInfo> yearlyInfoList = getYearlyInfoList(housingInfoList);
+		List<ChartInfo> chartInfoList = new ArrayList<ChartInfo>();
+		List<HousingLoanInfo> yearlyInfoList = getYearlyInfoList(housingInfoList, chartInfoList);
 
-		return yearlyInfoList;
+		housingLoanResponse.setGridResponse(yearlyInfoList);
+		housingLoanResponse.setChartInfo(chartInfoList);
+
+		return housingLoanResponse;
 
 	}
 
-	private static List<HousingLoanInfo> getYearlyInfoList(List<HousingLoanInfo> housingInfoList) {
+	private static List<HousingLoanInfo> getYearlyInfoList(List<HousingLoanInfo> housingInfoList,
+			List<ChartInfo> chartInfoList) {
 		List<HousingLoanInfo> yearlyList = new ArrayList<HousingLoanInfo>(10);
 		int counter = -1;
 		Double cumulativeInterest = 0.0;
@@ -77,9 +83,12 @@ public class HousingLoanController {
 		Double emi = 0.0;
 		HousingLoanInfo yearlyInfo = null;
 		int yearCounter = 1;
+		List<Integer> xCoordinateList = new ArrayList<Integer>();
+		List<Double> yCoordinateList = new ArrayList<Double>();
 		for (HousingLoanInfo housingLoanInfo : housingInfoList) {
 			counter++;
 			if (counter > 0 && counter % 12 == 0) {
+				ChartInfo<Integer, Double> chartInfo = new ChartInfo<Integer, Double>();
 				yearlyInfo = new HousingLoanInfo();
 				yearlyInfo.setInterest((double) Math.round(cumulativeInterest));
 				yearlyInfo.setPrinciple((double) Math.round(cumulativePrinciple));
@@ -91,8 +100,15 @@ public class HousingLoanController {
 				cumulativeInterest = housingLoanInfo.getInterest();
 				cumulativePrinciple = housingLoanInfo.getPrinciple();
 
+				chartInfo.setxCoordinate(yearCounter);
+				chartInfo.setyCoordinate(cumulativeInterest);
+				chartInfoList.add(chartInfo);
+
 				counter = 0;
-				yearCounter++;
+				int yearValue = yearCounter++;
+				if (yearlyInfo.getInterest() < yearlyInfo.getPrinciple()) {
+					yearlyInfo.setInterestDecreaseYear(yearValue--);
+				}
 				yearlyList.add(yearlyInfo);
 			} else {
 				openingBalance = housingLoanInfo.getOpeningBalance();
@@ -105,20 +121,18 @@ public class HousingLoanController {
 	}
 
 	public static void main(String str[]) {
-		RequestParam reqParam = new RequestParam();
-		reqParam.setPrinciple(100000.00);
-		reqParam.setInterestRate(8.4);
-		reqParam.setTenure(120.0);
-
-		List<HousingLoanInfo> list = getHousingLoanInfoList(reqParam);
-
-		int i = 1;
-		for (HousingLoanInfo housingLoanInfo : list) {
-			System.out.println(i + "Year" + "  Opening Balance :: " + "\t" + housingLoanInfo.getOpeningBalance()
-					+ "  Principle ::" + "\t" + housingLoanInfo.getPrinciple() + "  Interest ::" + "\t"
-					+ housingLoanInfo.getInterest() + " Closing Balance ::" + "\t"
-					+ housingLoanInfo.getClosingBalance());
-			i++;
-		}
-	}
+		/*
+		 * RequestParam reqParam = new RequestParam();
+		 * reqParam.setPrinciple(100000.00); reqParam.setInterestRate(8.4);
+		 * reqParam.setTenure(120.0);
+		 * 
+		 * List<HousingLoanInfo> list = getHousingLoanInfoList(reqParam);
+		 * 
+		 * int i = 1; for (HousingLoanInfo housingLoanInfo : list) {
+		 * System.out.println(i + "Year" + "  Opening Balance :: " + "\t" +
+		 * housingLoanInfo.getOpeningBalance() + "  Principle ::" + "\t" +
+		 * housingLoanInfo.getPrinciple() + "  Interest ::" + "\t" +
+		 * housingLoanInfo.getInterest() + " Closing Balance ::" + "\t" +
+		 * housingLoanInfo.getClosingBalance()); i++; }
+		 */}
 }

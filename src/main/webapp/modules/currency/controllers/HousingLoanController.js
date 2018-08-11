@@ -1,4 +1,4 @@
-var myfirstApp=angular.module("MyFirstApp",['ngGrid']);
+var myfirstApp=angular.module("MyFirstApp",['ngGrid','gridshore.c3js.chart']);
 
 
 
@@ -20,6 +20,9 @@ var selectedTaskIds = [];
 
 $scope.selectedItems =[];
 
+$scope.datapoints=[];
+$scope.datacolumns=[];
+$scope.datacolumns=[{"id":"yCoordinate","type":"bar"}];
 
 
 $scope.getHousingLoan=function(requestParam) {
@@ -29,13 +32,26 @@ $scope.getHousingLoan=function(requestParam) {
     data: requestParam,
     headers: {'Content-Type': 'application/json'}
 }).success(function (data, status, headers, config) {
-	$scope.constantEmi = data[0].constantEmi;
-	$scope.loanDetailList = data;
+	$scope.constantEmi = data.gridResponse[0].constantEmi;
+	$scope.loanDetailList = data.gridResponse;
+	$scope.datapoints= data.chartInfo;
+	var year;
+	var keepGoing = true;
+	angular.forEach(data.gridResponse, function(value, key) {
+	  if(keepGoing){
+		  if(value.interestDecreaseYear > 0) {
+			  console.log('value '+value.interestDecreaseYear);
+			  year = value.interestDecreaseYear;
+			  keepGoing = false;
+		  }
+	  }
+	});
+	var infoValue = 'Most of the EMI payment goes towards interest till '+ year + ' years. This shifts towards principal after ' + year + ' years.';
+	$scope.information = infoValue;
 }).error(function (data, status, headers, config) {
     $scope.status = status;
 });
 };
-
 
 $scope.gridOptions = {
 	data: 'loanDetailList',
