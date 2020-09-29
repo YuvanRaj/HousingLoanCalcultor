@@ -1,5 +1,6 @@
 package com.angular.rest;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,11 +8,15 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.angular.cfc.ChartInfo;
 import com.angular.cfc.HousingLoanInfo;
 import com.angular.cfc.HousingLoanResponse;
 import com.angular.cfc.RequestParam;
+import com.angular.cfc.SqrtResponse;
 
 /**
  * Controller used to calculate the housing loan for given tenure, principle,
@@ -20,10 +25,12 @@ import com.angular.cfc.RequestParam;
  * @author Yuvaraj
  *
  */
+
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Path("/housingloan")
 public class HousingLoanController {
 
-	@Path("getHousingLoanInfo")
+	/*@Path("getHousingLoanInfo")
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	public static HousingLoanResponse getHousingLoanInfoList(RequestParam requestParam) {
@@ -71,8 +78,66 @@ public class HousingLoanController {
 
 		return housingLoanResponse;
 
-	}
+	}*/
 
+	@Path("getHousingLoanInfo")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public static Response  getHousingLoanInfoList(RequestParam requestParam) {
+		HousingLoanResponse housingLoanResponse = new HousingLoanResponse();
+		Double p = requestParam.getPrinciple();
+		Double r = (requestParam.getInterestRate() / 100) / 12;
+		Double n = requestParam.getTenure() * 12;
+
+		Double numerator = Math.pow(1 + r, n);
+		Double denominator = numerator - 1;
+		Double emi = (p * r * numerator) / denominator;
+
+		List<HousingLoanInfo> housingInfoList = new ArrayList<HousingLoanInfo>();
+		HousingLoanInfo housingLoanInfo = new HousingLoanInfo();
+
+		housingLoanInfo.setEmi(emi);
+		housingLoanInfo.setInterest(p * r);
+		housingLoanInfo.setPrinciple(emi - (p * r));
+		housingLoanInfo.setOpeningBalance(p);
+		housingLoanInfo.setConstantEmi(emi);
+		housingInfoList.add(housingLoanInfo);
+
+		for (int i = 1; i <= n; i++) {
+			housingLoanInfo = housingInfoList.get(i - 1);
+
+			Double openBalance = housingLoanInfo.getOpeningBalance();
+			Double principle = housingLoanInfo.getPrinciple();
+			Double closeBalance = openBalance - principle;
+
+			housingLoanInfo = new HousingLoanInfo();
+			housingLoanInfo.setInterest(closeBalance * r);
+			housingLoanInfo.setEmi(emi);
+			housingLoanInfo.setOpeningBalance(closeBalance);
+			housingLoanInfo.setClosingBalance(closeBalance);
+			housingLoanInfo.setPrinciple(emi - (closeBalance * r));
+			housingLoanInfo.setConstantEmi((double) Math.round(emi));
+			housingInfoList.add(housingLoanInfo);
+		}
+
+		List<ChartInfo> chartInfoList = new ArrayList<ChartInfo>();
+		List<HousingLoanInfo> yearlyInfoList = getYearlyInfoList(housingInfoList, chartInfoList);
+
+		housingLoanResponse.setGridResponse(yearlyInfoList);
+		housingLoanResponse.setChartInfo(chartInfoList);
+
+		return Response
+	            .status(200)
+	            .header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600")
+	            .entity(housingLoanResponse)
+	            .build();
+
+	}
+	
 	private static List<HousingLoanInfo> getYearlyInfoList(List<HousingLoanInfo> housingInfoList,
 			List<ChartInfo> chartInfoList) {
 		List<HousingLoanInfo> yearlyList = new ArrayList<HousingLoanInfo>(10);
@@ -120,6 +185,28 @@ public class HousingLoanController {
 		return yearlyList;
 	}
 
+	@Path("getSqrt")
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	public static Response  getSqrt(RequestParam requestParam) {
+		SqrtResponse sqrtResponse = new SqrtResponse();
+		
+		DecimalFormat df = new DecimalFormat("#.####");
+		double value = Double.parseDouble(df.format(Math.pow(10, (Math.log10(requestParam.getInput()))/2)));
+		sqrtResponse.setSqrtValue(value);
+		
+		return Response
+	            .status(200)
+	            .header("Access-Control-Allow-Origin", "*")
+	            .header("Access-Control-Allow-Headers", "origin, content-type, accept, authorization")
+	            .header("Access-Control-Allow-Credentials", "true")
+	            .header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+	            .header("Access-Control-Max-Age", "1209600")
+	            .entity(sqrtResponse)
+	            .build();
+
+	}
+	
 	public static void main(String str[]) {
 		/*
 		 * RequestParam reqParam = new RequestParam();

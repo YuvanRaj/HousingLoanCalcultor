@@ -53,6 +53,21 @@ $scope.getHousingLoan=function(requestParam) {
 });
 };
 
+$scope.test= '';
+
+$scope.getSqrt=function(requestParam) {
+	$http({
+    method: 'POST',
+    url: "https://housingloancalcultor.herokuapp.com/services/housingloan/getSqrt",
+    data: requestParam,
+    headers: {'Content-Type': 'application/json'}
+}).success(function (data, status, headers, config) {
+	$scope.test= data.sqrtValue;
+}).error(function (data, status, headers, config) {
+    $scope.status = status;
+});
+};
+
 $scope.gridOptions = {
 	data: 'loanDetailList',
 	filterOptions: $scope.filterOptions,

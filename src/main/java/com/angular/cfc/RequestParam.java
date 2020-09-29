@@ -5,6 +5,7 @@ public class RequestParam {
 	private Double principle;
 	private Double interestRate;
 	private Double tenure;
+	private Double input;
 
 	public Double getPrinciple() {
 		return principle;
@@ -12,6 +13,14 @@ public class RequestParam {
 
 	public void setPrinciple(Double principle) {
 		this.principle = principle;
+	}
+
+	public Double getInput() {
+		return input;
+	}
+
+	public void setInput(Double input) {
+		this.input = input;
 	}
 
 	public Double getInterestRate() {
@@ -29,5 +38,7 @@ public class RequestParam {
 	public void setTenure(Double tenure) {
 		this.tenure = tenure;
 	}
+	
+	
 
 }
