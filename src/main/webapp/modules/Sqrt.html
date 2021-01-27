@@ -13,6 +13,18 @@
     .body {
 	  background-image: url("paper.gif");
 	}
+	.container {
+	  border: 1px solid rgb(212, 212, 212);
+      width: 820px;
+      height: 80px
+	}
+	.vertical-center {
+	  margin: 0;
+	  position: absolute;
+	  top: 50%;
+	  -ms-transform: translateY(-50%);
+	  transform: translateY(-50%);
+	}
     </style>
     <link rel="stylesheet" type="text/css" href="ng-grid.css" />
     <!-- <link rel="stylesheet" type="text/css" href="/modules/style.css" />
@@ -33,37 +45,46 @@
     <title>Housing Loan Calculator</title>
 </head>
 
-<body bgcolor="#FFE4B5" background="maths.jpg">
+<body bgcolor="#FFE4B5" background="background.jpg">
     <script src="app.js"></script>
     <script src="ng-grid.js"></script>
     <!-- Currency -->
     <script src="currency/controllers/HousingLoanController.js"></script>
     <div>
-        <table>
-            <div>
-                <tr>
-	                <td width="25%">
-					    <span><b><p style="color:white"">Enter the Number to Calculate Sqrt:</p></b></span>
+       	<div>
+       		<span><b><p>From Unit:</p></b></span>
+			<select ng-model="requestParam.fromUnit" ng-options="x for x in names">
+			</select>
+		</div>
+		<div>
+			<span><b><p>To Unit:</p></b></span>
+			<select ng-model="requestParam.toUnit" ng-options="x for x in names">
+			</select>
+		</div>
+		<div>
+		<td width="25%">
+					    <span><b><p>Enter the Value to Convert:</p></b></span>
 					    <input type="text" min="0" ng-model="requestParam.input" required>
 					</td>
-                 </tr>
-                 <tr>
-                 </tr>
-            </div>
-
-        </table>
-        <div>
-        <p style="color:honeydew"><b>Sqrt of the Number</b></p>
-        	 <p style="color:white"><b> {{test}} </b></p>
-        </div>
+		</div>
+		
+        
     </div> 
        
    <br><br>
-    <div align="center">
-        <button ng-click="getSqrt(requestParam)"><b>Get SQRT </b></button>&nbsp; &nbsp; &nbsp; &nbsp;
+    <div class="container">
+    	
+        	<button ng-click="convertUnit(requestParam)"><b>Convert Units</b></button>&nbsp; &nbsp; &nbsp; &nbsp;
+         
     </div>
+    <div>
+             <span><b><p>Converted Value</p></b></span>
+        	 <span><b><p>{{test}} {{unit}} </p></b></span>
+        </div>
     <br>
     <br>
+    
+    
     
 </body>
 

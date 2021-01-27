@@ -53,16 +53,42 @@ $scope.getHousingLoan=function(requestParam) {
 });
 };
 
-$scope.test= '';
-
-$scope.getSqrt=function(requestParam) {
+$scope.calculate=function(requestParam) {
 	$http({
     method: 'POST',
-    url: "https://housingloancalcultor.herokuapp.com/services/housingloan/getSqrt",
+    url: "https://housingloancalcultor.herokuapp.com/services/housingloan/calculateEquation",
     data: requestParam,
     headers: {'Content-Type': 'application/json'}
 }).success(function (data, status, headers, config) {
-	$scope.test= data.sqrtValue;
+	if($scope.indeterminate == null){
+		$scope.xvalue= data.xValue;
+		$scope.yvalue= data.yValue;
+	}
+	else{
+		$scope.indeterminate=data.indeterminate;
+	}
+}).error(function (data, status, headers, config) {
+    $scope.status = status;
+});
+};
+
+$scope.test= '';
+
+$scope.xvalue= '';
+$scope.yvalue= '';
+$scope.indeterminate='';
+
+$scope.names = ["l", "ml", "km","m","mm","cm"];
+
+$scope.convertUnit=function(requestParam) {
+	$http({
+    method: 'POST',
+    url: "https://housingloancalcultor.herokuapp.com/services/housingloan/convertMeasure",
+    data: requestParam,
+    headers: {'Content-Type': 'application/json'}
+}).success(function (data, status, headers, config) {
+	$scope.test= data.convertedResponse;
+	$scope.unit= data.unit;
 }).error(function (data, status, headers, config) {
     $scope.status = status;
 });

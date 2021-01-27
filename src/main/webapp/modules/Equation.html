@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html ng-app="MyFirstApp" ng-controller="myFirstAppController as invoice">
+
+<head>
+    <style>
+    .gridStyle {
+        border: 1px solid rgb(212, 212, 212);
+        width: 820px;
+        height: 400px
+    }
+    #container {
+	    width:100%;
+	    text-align:center;
+	}
+    </style>
+    <link rel="stylesheet" type="text/css" href="ng-grid.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="/modules/style.css" />
+ -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
+ -->
+ 	
+ 	<link href="js/c3.min.css" rel="stylesheet" type="text/css"/>
+	<script src="js/d3.min.js" charset="utf-8"></script>
+	<script src="js/c3.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
+    <script src="js/c3-angular.min.js"></script> 
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-resource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <meta charset="ISO-8859-1">
+    <title>Equation Solver</title>
+</head>
+
+<body>
+    <script src="app.js"></script>
+    <script src="ng-grid.js"></script>
+    <!-- Currency -->
+    <script src="currency/controllers/HousingLoanController.js"></script>
+    <div id="container" >
+    	<div id='main-contents'>
+    		<div class='col-tit'>
+           		<h2 class="title">Calculates the solution of a system of two linear equations in two variables and draws the chart.
+           		</h2>
+            </div>
+            <div class='equ-tit'>	
+            	<span><p><b>System of two linear equations in two variables</b></p> <br></span>
+            	<p>a1x+b1y=c1</p>
+            	<p>a2x+b2y=c2</p> 
+            </div>
+            <div class='cal-tit'>	
+            	<span><p><b>System of two linear equations in two variables</b></p> <br></span>
+            	<input size="6" type="text" min="0" ng-model="requestParam.a1" required>x+<input size="6" type="text" min="0" ng-model="requestParam.b1" required>y=<input size="6" type="text" min="0" ng-model="requestParam.c1" required></br>
+            	<input size="6" type="text" min="0" ng-model="requestParam.a2" required>x+<input size="6" type="text" min="0" ng-model="requestParam.b2" required>y=<input size="6" type="text" min="0" ng-model="requestParam.c2" required>
+            </div>
+    		<br>
+		    <div class='but-tit'>
+		        <button ng-click="calculate(requestParam)">Calculate</button>
+		    </div>
+    
+		    <div>
+		        <p> X- Value ={{xvalue}}</p>
+		        <p> Y- Value ={{yvalue}}</p>
+		        <p> Indeterminate ={{indeterminate}}</p>
+		    </div>
+    
+    	</div>
+    
+    </div>  <!-- End -->
+   
+</body>
+
+</html>
